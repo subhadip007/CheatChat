@@ -9,6 +9,9 @@ const {
   userLeave,
   getRoomUsers
 } = require('./utils/users');
+const botMessage = require('./utils/botmsg');
+
+
 
 const app = express();
 const server = http.createServer(app);
@@ -17,7 +20,7 @@ const io = socketio(server);
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-const botName = 'Lily';
+const botName = 'Lily(bot)';
 
 // Run when client connects
 io.on('connection', socket => {
@@ -33,9 +36,9 @@ io.on('connection', socket => {
     socket.broadcast
       .to(user.room)
       .emit(
-        'message',
-        formatMessage(botName, `${user.username} has joined the chat`)
-      );
+        'botmessage',
+        botMessage(botName, `${user.username} has joined the chat`)
+      ); 
 
     // Send users and room info
     io.to(user.room).emit('roomUsers', {
@@ -57,8 +60,8 @@ io.on('connection', socket => {
 
     if (user) {
       io.to(user.room).emit(
-        'message',
-        formatMessage(botName, `${user.username} has left the chat`)
+        'botmessage',
+        botMessage(botName, `${user.username} has left the chat`)
       );
 
       // Send users and room info
