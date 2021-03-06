@@ -23,7 +23,12 @@ socket.on('roomUsers', ({ room, users }) => {
 // Message from server
 socket.on('message', message => {
   //console.log(message);
+
+  if(message.username != username){
   outputMessage(message);
+  }else{
+    outputownMessage(message);
+  }
 
 
   // Scroll down
@@ -60,7 +65,7 @@ chatForm.addEventListener('submit', e => {
 // Output message to DOM
 function outputMessage(message) {
 
-  if(message.username!= username){        
+         
   const div = document.createElement('div');
   div.classList.add('message');
   const p = document.createElement('p');
@@ -72,8 +77,26 @@ function outputMessage(message) {
   para.classList.add('text');
   para.innerText = message.text;
   div.appendChild(para);
+  if(message.username != username){
   document.querySelector('.chat-messages').appendChild(div);
   }
+}
+function outputownMessage(message) {
+
+         
+  const div = document.createElement('div');
+  div.classList.add('own-message');
+  const p = document.createElement('p');
+  p.classList.add('meta');
+  p.innerText = message.username;
+  p.innerHTML += `<span>${message.time}</span>`;
+  div.appendChild(p);
+  const para = document.createElement('p');
+  para.classList.add('text');
+  para.innerText = message.text;
+  div.appendChild(para);
+  document.querySelector('.chat-messages').appendChild(div);
+  
 }
 
 //botmessage
