@@ -32,27 +32,24 @@ socket.on('message',(message) => {
 
   if(message.username != username){
   outputMessage(message);
-  socket.on('image',(image)=>{
-    //!
-    // console.log(image);
-    outputImage(image);
-    document.getElementById('file').value=null;
-  })
+  
 
 ;
   
   }else{
     console.log("here")
     outputownMessage(message);
-    socket.on('image',(image)=>{
-      //!
-      // console.log(image);
-      outputOwnImage(image);
-    })
+   
   }
 
  
-
+  socket.on('image',(image)=>{
+    //!
+    // console.log(image);
+    outputImage(image);
+    if( document.getElementById('file').value != null)
+    document.getElementById('file').value=null;
+  })
 
   // Scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight;
