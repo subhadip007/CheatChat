@@ -1,4 +1,6 @@
 
+
+
 const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat-messages');
 const roomName = document.getElementById('room-name');
@@ -10,6 +12,9 @@ const { username, room } = Qs.parse(location.search, {
 });
 
 const socket = io();
+var typing=false;
+var timeout=undefined;
+
 
 // Join chatroom
 socket.emit('joinRoom', { username, room });
@@ -21,33 +26,54 @@ socket.on('roomUsers', ({ room, users }) => {
 });
 
 // Message from server
-socket.on('message', message => {
-  //console.log(message);
+socket.on('message',(message) => {
+  // console.log(message);
+  
 
   if(message.username != username){
   outputMessage(message);
+  socket.on('image',(image)=>{
+    //!
+    // console.log(image);
+    outputImage(image);
+    document.getElementById('file').value=null;
+  })
+
+;
+  
   }else{
+    console.log("here")
     outputownMessage(message);
+    socket.on('image',(image)=>{
+      //!
+      // console.log(image);
+      outputOwnImage(image);
+    })
   }
+
+ 
 
 
   // Scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
+
 //Message from bot
 socket.on('botmessage',botmessage=>{
      outputbotMessage(botmessage);
 })
 
+//! attention
 
+//! ----------------------------------------
 // Message submit
 chatForm.addEventListener('submit', e => {
   e.preventDefault();
 
   // Get message text
   let msg = e.target.elements.msg.value;
-  
+ 
   msg = msg.trim();
   
   if (!msg){
@@ -56,8 +82,7 @@ chatForm.addEventListener('submit', e => {
 
   // Emit message to server
   socket.emit('chatMessage', msg);
-
-  // Clear input
+// Clear input
   e.target.elements.msg.value = '';
   e.target.elements.msg.focus();
 });
@@ -99,6 +124,19 @@ function outputownMessage(message) {
   
 }
 
+  function outputImage(image){
+   const img= document.createElement('img');
+   img.classList.add('image1');
+   img.src=`data:image/jpg;base64, ${image}`;
+   document.querySelector('.chat-messages').appendChild(img); 
+}
+ function outputOwnImage(image){
+   const img= document.createElement('img');
+   img.classList.add('own-image');
+   img.src=`data:image/jpg;base64, ${image}`;
+   document.querySelector('.chat-messages').appendChild(img); 
+}
+
 //botmessage
 function outputbotMessage(botmessage) {
   const div = document.createElement('div');
@@ -125,5 +163,46 @@ function outputUsers(users) {
  }
 
 
- //! TODO: 1.create a different class to render their own msg to them.
-//!  TODO: add the css for that send msg class.
+
+ //! user is typing still on process
+//  $(document).ready(function(){
+//   $('#msg').keypress((e)=>{
+//     if(e.which!=13){
+//       typing=true
+//       socket.emit('typing', {user:user, typing:true})
+//       clearTimeout(timeout)
+//       timeout=setTimeout(typingTimeout, 3000)
+//     }else{
+//       clearTimeout(timeout)
+//       typingTimeout()
+//       //sendMessage() function will be called once the user hits enter
+//       sendMessage()
+//     }
+//   })
+
+//   //code explained later
+//   socket.on('display', (data)=>{
+//     if(data.typing==true)
+//       $('.typing').text(`${data.user} is typing...`)
+//     else
+//       $('.typing').text("")
+//   })
+// })
+
+//?emitting the photo here
+ document.getElementById('file').addEventListener('change', function(e) {
+e.preventDefault();
+  const reader = new FileReader();
+  reader.onload = function() {
+    const bytes = new Uint8Array(this.result);
+    socket.emit('image', bytes);
+  };
+  reader.readAsArrayBuffer(this.files[0]);
+
+}, false);
+
+
+async function play() {
+  var audio = new Audio('https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+ audio.play();
+}

@@ -39,6 +39,7 @@ io.on('connection', socket => {
         'botmessage',
         botMessage(botName, `${user.username} has joined the chat`)
       ); 
+      
 
     // Send users and room info
     io.to(user.room).emit('roomUsers', {
@@ -48,11 +49,17 @@ io.on('connection', socket => {
   });
 
   // Listen for chatMessage
-  socket.on('chatMessage', msg => {
+  socket.on('chatMessage',(msg) => {
     const user = getCurrentUser(socket.id);
-
     io.to(user.room).emit('message', formatMessage(user.username, msg));
+    // console.log(msg)
   });
+  socket.on('image',(image)=>{
+    // console.log(image)
+    const user = getCurrentUser(socket.id);
+     io.to(user.room).emit('image', image.toString('base64'));
+     
+  })
 
   // Runs when client disconnects
   socket.on('disconnect', () => {
@@ -71,6 +78,16 @@ io.on('connection', socket => {
       });
     }
   });
+
+
+ 
+    socket.on('typing', (data)=>{
+      if(data.typing==true)
+         io.emit('display', data)
+      else
+         io.emit('display', data)
+    })
+
 });
 
 const PORT = process.env.PORT || 3000;

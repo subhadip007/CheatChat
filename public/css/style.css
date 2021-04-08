@@ -63,7 +63,9 @@ a {
 .chat-main {
 	display: grid;
 	grid-template-columns: 1fr 3fr;
-	background-color: black;
+	/* background-image: url(./crop.jfif); */
+	background-color: #350B40;
+	background-size: 50%;
 }
 
 .chat-sidebar {
@@ -87,7 +89,13 @@ a {
 .chat-sidebar ul li {
 	padding: 10px 0;
 }
-
+#file{
+	border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+	background-color: var(--dark-color-b);
+}
 .chat-messages {
 	padding: 30px;
 	max-height: 500px;
@@ -95,7 +103,18 @@ a {
 	padding-right: 0;
 	height: 65vh;
 }
-
+.chat-messages .image1{
+	max-height:150px !important;
+	max-width:100%;
+	position: relative;
+	margin-left: 28.9em;
+	padding-bottom: 3px;
+}
+.chat-messages .own-image {
+	max-height:150px !important;
+	max-width:100%;
+	padding-bottom: 3px;
+}
 .chat-messages    .message{    /*this is for normal messages*/
 	padding: 10px;
 	
@@ -121,8 +140,8 @@ a {
 	border-radius: 5px;
 	position: relative;
 	width: 40%;
-
-	margin-right: 28.9em;/*! bad fix ik
+margin-left: 0 !important;
+	margin-right: 50em;/*! bad fix ik
 	
 	 
 	/* display:block; */
