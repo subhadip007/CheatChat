@@ -121,18 +121,18 @@ function outputownMessage(message) {
   
 }
 
-  function outputImage(image){
+   async function outputImage(image){
    const img= document.createElement('img');
    img.classList.add('image1');
    img.src=`data:image/jpg;base64, ${image}`;
    document.querySelector('.chat-messages').appendChild(img); 
 }
- function outputOwnImage(image){
-   const img= document.createElement('img');
-   img.classList.add('own-image');
-   img.src=`data:image/jpg;base64, ${image}`;
-   document.querySelector('.chat-messages').appendChild(img); 
-}
+//  function outputOwnImage(image){
+//    const img= document.createElement('img');
+//    img.classList.add('own-image');
+//    img.src=`data:image/jpg;base64, ${image}`;
+//    document.querySelector('.chat-messages').appendChild(img); 
+// }
 
 //botmessage
 function outputbotMessage(botmessage) {
@@ -200,6 +200,7 @@ e.preventDefault();
 
 
 async function play() {
-  var audio = new Audio('https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+  var audio = new Audio()
+  
  audio.play();
 }
